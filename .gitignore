@@ -1,0 +1,11 @@
+build
+*.pyc
+gpyfft.egg-info
+dist
+gpyfftlib.cpp
+*.so
+.cache
+.ipynb_checkpoints
+.vscode/
+__pycache__/
+repoexclude/
