@@ -8,6 +8,9 @@ TODO
 =======
 * Make better interfaces
 * Make more tests
+* Separate plotting from return data? Figure out how to tie match result to projetion
+
+
 
 
 
@@ -38,3 +41,10 @@ plt.clim([0, 3])
 plt.colorbar()
 
 ```
+
+
+Dependencies
+==============
+* rasterio (and some of its dependencies)
+* pyfftw
+* numpy,matplotlib,etc... 
