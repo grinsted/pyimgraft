@@ -43,6 +43,7 @@ class MatchResult:
         C = np.sqrt(self.du**2 + self.dv**2)
         
         plt.pcolormesh(get_corners(px), get_corners(py), C,alpha=alpha)
+        plt.colorbar()
         plt.quiver(px,py,self.du*dx,self.dv*dy)
         
     #TODO add more methods to plot and clean results....
@@ -238,8 +239,6 @@ if __name__ == "__main__":
     
     r.clean()
     r.plot(x=A.x,y=A.y)
-    plt.clim([0, 5])
-    plt.colorbar()
     print((time2-time1)*1000.0)
     #plt.hist(r.du.ravel())
 
