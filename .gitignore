@@ -9,3 +9,4 @@ gpyfftlib.cpp
 .vscode/
 __pycache__/
 repoexclude/
+.spyproject/
