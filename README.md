@@ -44,7 +44,7 @@ Dependencies
 * pyproj
 
 ```python
-conda install pyproj -c conda-forge
+conda install pyfftw -c conda-forge
 conda install rasterio pyproj
 ```
 
