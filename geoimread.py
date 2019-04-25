@@ -42,6 +42,7 @@ def geoimread(fname, lon=None, lat=None, padding=0.0, band=1):
                 cy = lat
             else:
                 cx, cy = transform(Ill, Imap, lon, lat)  # lat lon flipped
+                
             corner1 = ~src.transform * (np.min(cx) - padding[0], np.min(cy) - padding[1])
             corner2 = ~src.transform * (np.max(cx) + padding[0], np.max(cy) + padding[1])
             cols = sorted([corner1[0], corner2[0]])
@@ -73,5 +74,5 @@ def geoimread(fname, lon=None, lat=None, padding=0.0, band=1):
 if __name__ == "__main__":
 
     fA = 'https://storage.googleapis.com/gcp-public-data-landsat/LT05/01/023/001/LT05_L1TP_023001_19940714_20170113_01_T2/LT05_L1TP_023001_19940714_20170113_01_T2_B3.TIF'
-    A = geoimread(fA, -30.19, 81.245, 10000)
+    A = geoimread(fA, -30.19, 81.245, 20000)
     A.plot()

@@ -50,9 +50,7 @@ class MatchResult:
 
 
 def get_corners(pu):
-    # helper function to generate inputs for pcolormesh
-
-    # extend longitude by 1
+    # helper function to generate inputs for pcolormesh 
     pu_extend = np.zeros((pu.shape[0] + 2, pu.shape[1] + 2))
     pu_extend[1:-1, 1:-1] = pu  # fill up with original values
     # fill in extra endpoints
@@ -65,7 +63,8 @@ def get_corners(pu):
     return (pu_extend[0:-2, 0:-2] + pu_extend[0:-2, 1:-1] + pu_extend[1:-1, 0:-2] + pu_extend[1:-1, 1:-1]) / 4.0
 
 
-def templatematch(A, B, pu=None, pv=None, TemplateWidth=128, SearchWidth=128 + 16, Initialdu=0, Initialdv=0):
+def templatematch(A, B, pu=None, pv=None, TemplateWidth=128, SearchWidth=128 + 16, 
+                  Initialdu=0, Initialdv=0):
     """Feature tracking by template matching
 
     Usage : r = templatematch(A, B, TemplateWidth=64, SearchWidth=128)
@@ -74,7 +73,7 @@ def templatematch(A, B, pu=None, pv=None, TemplateWidth=128, SearchWidth=128 + 1
 
     Parameters
     ----------
-    A, B : array_like
+    A, B : matrix_like
         Two images as 2d-matrices.
     pu, pv : array_like, optional
         Pixel coordinates in image A that you would like to find in image B (default is to drape a grid over A)
