@@ -45,6 +45,11 @@ plt.colorbar()
 
 Dependencies
 ==============
-* rasterio (and some of its dependencies)
 * pyfftw
-* numpy,matplotlib,etc... 
+* rasterio (and some of its dependencies)
+* pyproj
+
+```python
+conda install pyproj -c conda-forge
+conda install rasterio pyproj
+```
