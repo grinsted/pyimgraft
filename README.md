@@ -4,12 +4,6 @@ pyimgraft
 Initial work to bring imgraft to python. -Or atleast the feature tracker.
 
 
-TODO
-=======
-* Make better interfaces
-* Make more tests
-* Separate plotting from return data? Figure out how to tie match result to projetion
-
 
 
 
@@ -53,3 +47,13 @@ Dependencies
 conda install pyproj -c conda-forge
 conda install rasterio pyproj
 ```
+
+TODO
+=======
+This is not finished
+
+* Make better interfaces (explore using xarray instead of geoimage)
+* Make more tests
+* setup a build bot 
+* Separate plotting from return data? Figure out how to tie match result to projection (again xarray would be useful)
+
