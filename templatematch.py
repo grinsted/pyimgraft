@@ -6,7 +6,7 @@ from scipy.signal import medfilt2d
 from scipy.interpolate import interp1d
 import pyfftw
 pyfftw.config.PLANNER_EFFORT = 'FFTW_MEASURE'
-
+from matplotlib import pyplot as plt
 
 class MatchResult:
     def __init__(self, pu, pv, du, dv, peakCorr, meanAbsCorr, method):
@@ -35,10 +35,10 @@ class MatchResult:
         dy = 1.0
         if x is not None:
             px = interp1d(np.arange(0, x.shape[0]), x, fill_value='extrapolate')(px)
-            dx = x[1] - x[0]
+            dx = float(x[1] - x[0])
         if y is not None:
             py = interp1d(np.arange(0, y.shape[0]), y, fill_value='extrapolate')(py)
-            dy = y[1] - y[0]
+            dy = float(y[1] - y[0])
 
         C = np.sqrt(self.du ** 2 + self.dv ** 2)
 
@@ -211,28 +211,32 @@ def forient(img):
 if __name__ == "__main__":
     from geoimread import geoimread
     import matplotlib.pyplot as plt
-    # from skimage.transform import rescale, resize, downscale_local_mean
 
-    # fA= 'https://storage.googleapis.com/gcp-public-data-landsat/LT05/01/023/001/LT05_L1TP_023001_19940714_20170113_01_T2/LT05_L1TP_023001_19940714_20170113_01_T2_B3.TIF'
-    # fB= 'https://storage.googleapis.com/gcp-public-data-landsat/LT05/01/023/001/LT05_L1TP_023001_19940916_20170112_01_T2/LT05_L1TP_023001_19940916_20170112_01_T2_B3.TIF'
-
+    # Read the data
     fA = 'https://storage.googleapis.com/gcp-public-data-landsat/LC08/01/023/001/LC08_L1TP_023001_20150708_20170407_01_T1/LC08_L1TP_023001_20150708_20170407_01_T1_B8.TIF'
     fB = 'https://storage.googleapis.com/gcp-public-data-landsat/LC08/01/023/001/LC08_L1TP_023001_20160710_20170323_01_T1/LC08_L1TP_023001_20160710_20170323_01_T1_B8.TIF'
-
-    A = geoimread(fA, -30.19, 81.245, 20000)
-    B = geoimread(fB, -30.19, 81.245, 20000)
-
+        
+    A = geoimread(fA, roi_x=-30.19, roi_y=81.245, roi_crs={'init': 'EPSG:4326'}, buffer=20000)
+    B = geoimread(fB, roi_x=-30.19, roi_y=81.245, roi_crs={'init': 'EPSG:4326'}, buffer=20000)
+    
     import time
+    from templatematch import templatematch
     time1 = time.time()
-    r = templatematch(A.data, B.data, TemplateWidth=128, SearchWidth=128 + 64)
+    r = templatematch(A, B, TemplateWidth=128, SearchWidth=128 + 64)
     time2 = time.time()
-
-    plt.figure()
+    ##
+    
+    
+    
     from matplotlib import pyplot as plt
-    A.plot()
-
+    ax = plt.axes()
+    A.plot.imshow(cmap='gray', add_colorbar=False)
+    ax.set_aspect('equal')
+    ax.autoscale(tight=True)
+    
     r.clean()
     r.plot(x=A.x, y=A.y)
+
     print((time2 - time1) * 1000.0)
     # plt.hist(r.du.ravel())
 
