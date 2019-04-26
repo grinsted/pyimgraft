@@ -20,7 +20,7 @@ from geoimread import geoimread
 fA = 'https://storage.googleapis.com/gcp-public-data-landsat/LC08/01/023/001/LC08_L1TP_023001_20150708_20170407_01_T1/LC08_L1TP_023001_20150708_20170407_01_T1_B8.TIF'
 fB = 'https://storage.googleapis.com/gcp-public-data-landsat/LC08/01/023/001/LC08_L1TP_023001_20160710_20170323_01_T1/LC08_L1TP_023001_20160710_20170323_01_T1_B8.TIF'
 
-# Use geoimread/xarray to subregion section of cloud optimized tifs ... 
+# Use geoimread/xarray to read a tiny region of a cloud optimized geotif.
 A = geoimread(fA, roi_x=-30.19, roi_y=81.245, roi_crs={'init': 'EPSG:4326'}, buffer=20000)
 B = geoimread(fB, roi_x=-30.19, roi_y=81.245, roi_crs={'init': 'EPSG:4326'}, buffer=20000)
 
