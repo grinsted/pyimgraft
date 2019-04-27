@@ -8,8 +8,30 @@ Created on Thu Apr 25 11:58:22 2019
 import xarray as xr
 import numpy as np
 from rasterio.warp import transform
+from typing import List
+Vector = List[float]
 
-def geoimread(fname, roi_x=None, roi_y=None, roi_crs=None, buffer=0.0, band=1):
+def geoimread(fname: str, 
+              roi_x: Vector=None, 
+              roi_y: Vector=None, 
+              roi_crs: dict=None, 
+              buffer: float=0.0, 
+              band: int=1) -> xr.core.dataarray.DataArray:
+    """Reads a sub-region of a geotiff/geojp2/ that overlaps a region of interest (roi)
+    
+    This is a simple wrapper of xarray functionality. 
+
+    Parameters:
+    fname (str) : file.
+    roi_x, roi_y (List[float]) : region of interest.
+    roi_crs (dict) : ROI coordinate reference system, in rasterio dict format (if different from scene coordinates)
+    buffer (float) : adds a buffer around the region of interest. 
+    band (int) : which bands to read.
+    
+    Returns
+        xr.core.dataarray.DataArray : The cropped scene.
+
+    """    
     da = xr.open_rasterio(fname)
     if roi_x is not None:
         if not hasattr(roi_x, "__len__"):
@@ -24,9 +46,10 @@ def geoimread(fname, roi_x=None, roi_y=None, roi_crs=None, buffer=0.0, band=1):
         return da[band-1,:,:].squeeze()
     
 if __name__ == "__main__":
+    # test code...
     # Read the data
     fA = 'https://storage.googleapis.com/gcp-public-data-landsat/LC08/01/023/001/LC08_L1TP_023001_20150708_20170407_01_T1/LC08_L1TP_023001_20150708_20170407_01_T1_B8.TIF'
-    A = geoimread(fA, roi_x=-30.19, roi_y=81.245, roi_crs={'init': 'EPSG:4326'}, buffer=20000)
+    A = geoimread(fA, roi_x=[-30.19], roi_y=[81.245], roi_crs={'init': 'EPSG:4326'}, buffer=20000)
 
     import matplotlib.pyplot as plt
     ax = plt.axes()
