@@ -9,6 +9,7 @@ pyfftw.config.PLANNER_EFFORT = 'FFTW_MEASURE'
 from matplotlib import pyplot as plt
 
 class MatchResult:
+
     def __init__(self, pu, pv, du, dv, peakCorr, meanAbsCorr, method):
         self.pu = pu
         self.pv = pv
@@ -209,6 +210,7 @@ def forient(img):
 
 
 if __name__ == "__main__":
+    # test code
     from geoimread import geoimread
     import matplotlib.pyplot as plt
 
@@ -216,8 +218,8 @@ if __name__ == "__main__":
     fA = 'https://storage.googleapis.com/gcp-public-data-landsat/LC08/01/023/001/LC08_L1TP_023001_20150708_20170407_01_T1/LC08_L1TP_023001_20150708_20170407_01_T1_B8.TIF'
     fB = 'https://storage.googleapis.com/gcp-public-data-landsat/LC08/01/023/001/LC08_L1TP_023001_20160710_20170323_01_T1/LC08_L1TP_023001_20160710_20170323_01_T1_B8.TIF'
         
-    A = geoimread(fA, roi_x=-30.19, roi_y=81.245, roi_crs={'init': 'EPSG:4326'}, buffer=20000)
-    B = geoimread(fB, roi_x=-30.19, roi_y=81.245, roi_crs={'init': 'EPSG:4326'}, buffer=20000)
+    A = geoimread(fA, roi_x=[-30.19], roi_y=[81.245], roi_crs={'init': 'EPSG:4326'}, buffer=20000)
+    B = geoimread(fB, roi_x=[-30.19], roi_y=[81.245], roi_crs={'init': 'EPSG:4326'}, buffer=20000)
     
     import time
     from templatematch import templatematch
