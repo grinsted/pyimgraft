@@ -182,12 +182,12 @@ def templatematch(A, B, pu=None, pv=None, TemplateWidth=128, SearchWidth=128 + 1
         if edgedist == 0:
             continue  # because we dont trust peak if at edge of domain.
         else:
-            ww = np.amin((edgedist, 6))
+            ww = np.amin((edgedist, 4))
             c = C[mix[0] - ww:mix[0] + ww + 1, mix[1] - ww:mix[1] + ww + 1]
             [uu, vv] = np.meshgrid(C_uu[mix[1] - ww:mix[1] + ww + 1], C_vv[mix[0] - ww:mix[0] + ww + 1])
 
             # simple, fast, and excellent performance for landsat test images.
-            c = c - np.mean(np.abs(c.ravel()))
+            c = c - np.mean(abs(c.ravel()))
             c[c < 0] = 0
             c = c / np.sum(c)
             mix = (np.sum(np.multiply(vv, c)), np.sum(np.multiply(uu, c)))
