@@ -28,8 +28,6 @@ class test_templatematch(unittest.TestCase):
         
         residual = du - predicted
         
-        #from matplotlib import pyplot as plt
-        #plt.plot(predicted % 1,residual,'.')  # try to minimize systematic errors
         
         quality = np.nanstd(residual)
         self.assertLess(quality,0.12,'Poor sub-pixel performance: {}.'.format(quality))
@@ -37,11 +35,17 @@ class test_templatematch(unittest.TestCase):
         bias = np.nanmedian(residual)
         self.assertLess(bias,0.01,'Biased sub-pixel offset: {}.'.format(bias))
         
+        #check if sub pixel offset residual depends on subpixel offset
         phase = (predicted % 1)*2*np.pi
         X = np.column_stack((np.cos(phase),np.sin(phase)))
         p = np.linalg.lstsq(X,residual)[0]
         hamp = np.sqrt(p[0]**2+p[1]**2)
-        self.assertLess(hamp,0.1,'Large systematic bias for sub-pixel offset: {}.'.format(hamp))
+        self.assertLess(hamp,0.1,'Large cyclic bias in sub-pixel offset: {}.'.format(hamp))
+        #from matplotlib import pyplot as plt
+        #plt.plot(predicted % 1,residual,'.')  # try to minimize systematic errors
+
+
+
 
 
 if __name__ == "__main__":
