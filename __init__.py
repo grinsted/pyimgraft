@@ -1,1 +1,1 @@
-from pyimgraft.geoimread import geoimread, Geoimage
+from pyimgraft.geoimread import geoimread

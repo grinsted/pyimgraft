@@ -1,6 +1,8 @@
 pyimgraft
 ======
 
+![Travis CI](https://travis-ci.org/grinsted/pyimgraft.svg?branch=master)
+
 Initial work to bring imgraft to python. -Or atleast the feature tracker.
 
 
