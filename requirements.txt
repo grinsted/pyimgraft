@@ -1,0 +1,4 @@
+xarray~=0.12.0
+rasterio~=1.0.0
+pyfftw~=0.11.0
+numpy~=1.15.0
