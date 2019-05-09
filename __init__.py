@@ -1,1 +1,2 @@
 from pyimgraft.geoimread import geoimread
+from pyimgraft.templatematch import templatematch

@@ -5,7 +5,7 @@
 #import geoimread
 import numpy as np
 from skimage.transform import resize 
-from templatematch import templatematch
+import pyimgraft
 
 
 import unittest
@@ -16,7 +16,7 @@ class test_templatematch(unittest.TestCase):
 
         A = np.random.normal(size=[100,30000])
         B = resize(A,[100,30010],anti_aliasing=True,mode='reflect')
-        r = templatematch(A, B, TemplateWidth=64, SearchWidth=64 + 32)
+        r = pyimgraft.templatematch(A, B, TemplateWidth=64, SearchWidth=64 + 32)
         du = r.du.ravel()
         pu = r.pu.ravel()
         
