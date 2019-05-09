@@ -38,7 +38,7 @@ class test_templatematch(unittest.TestCase):
         #check if sub pixel offset residual depends on subpixel offset
         phase = (predicted % 1)*2*np.pi
         X = np.column_stack((np.cos(phase),np.sin(phase)))
-        p = np.linalg.lstsq(X,residual,rcond=None)[0]
+        p = np.linalg.lstsq(X,residual,rcond=0)[0]
         hamp = np.sqrt(p[0]**2+p[1]**2)
         self.assertLess(hamp,0.1,'Large cyclic bias in sub-pixel offset: {}.'.format(hamp))
         #from matplotlib import pyplot as plt
