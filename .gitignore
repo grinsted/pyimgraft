@@ -1,4 +1,5 @@
 gpyfft.egg-info
+.pytest*
 gpyfftlib.cpp
 *.egg
 *.egg-info
