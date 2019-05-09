@@ -9,53 +9,60 @@ import xarray as xr
 import numpy as np
 from rasterio.warp import transform
 from typing import List
+
 Vector = List[float]
 
 
-def geoimread(fname: str, roi_x: Vector=None, 
-              roi_y: Vector=None, 
-              roi_crs: dict=None, 
-              buffer: float=0.0, 
-              band: int=1) -> xr.core.dataarray.DataArray:
+def geoimread(
+    fname: str,
+    roi_x: Vector = None,
+    roi_y: Vector = None,
+    roi_crs: dict = None,
+    buffer: float = 0.0,
+    band: int = 1,
+) -> xr.core.dataarray.DataArray:
     """Reads a sub-region of a geotiff/geojp2/ that overlaps a region of interest (roi)
-    
-    This is a simple wrapper of xarray functionality. 
+
+    This is a simple wrapper of xarray functionality.
 
     Parameters:
     fname (str) : file.
     roi_x, roi_y (List[float]) : region of interest.
     roi_crs (dict) : ROI coordinate reference system, in rasterio dict format (if different from scene coordinates)
-    buffer (float) : adds a buffer around the region of interest. 
+    buffer (float) : adds a buffer around the region of interest.
     band (int) : which bands to read.
-    
+
     Returns
         xr.core.dataarray.DataArray : The cropped scene.
 
-    """    
+    """
     da = xr.open_rasterio(fname)
     if roi_x is not None:
         if not hasattr(roi_x, "__len__"):
             roi_x = [roi_x]
             roi_y = [roi_y]
         if roi_crs is not None:
-            roi_x, roi_y = transform(src_crs=roi_crs, dst_crs=da.crs, xs=roi_x, ys=roi_y)
+            roi_x, roi_y = transform(
+                src_crs=roi_crs, dst_crs=da.crs, xs=roi_x, ys=roi_y
+            )
         rows = (da.y > np.min(roi_y) - buffer) & (da.y < np.max(roi_y) + buffer)
         cols = (da.x > np.min(roi_x) - buffer) & (da.x < np.max(roi_x) + buffer)
-        return da[band-1, rows, cols].squeeze()
+        return da[band - 1, rows, cols].squeeze()
     else:
-        return da[band-1, :, :].squeeze()
+        return da[band - 1, :, :].squeeze()
 
 
 if __name__ == "__main__":
     # test code...
     # Read the data
-    fA = 'https://storage.googleapis.com/gcp-public-data-landsat/LC08/01/023/001/LC08_L1TP_023001_20150708_20170407_01_T1/LC08_L1TP_023001_20150708_20170407_01_T1_B8.TIF'
-    A = geoimread(fA, roi_x=[-30.19], roi_y=[81.245], roi_crs={'init': 'EPSG:4326'}, buffer=20000)
+    fA = "https://storage.googleapis.com/gcp-public-data-landsat/LC08/01/023/001/LC08_L1TP_023001_20150708_20170407_01_T1/LC08_L1TP_023001_20150708_20170407_01_T1_B8.TIF"
+    A = geoimread(
+        fA, roi_x=[-30.19], roi_y=[81.245], roi_crs={"init": "EPSG:4326"}, buffer=20000
+    )
 
     import matplotlib.pyplot as plt
+
     ax = plt.axes()
-    A.plot.imshow(cmap='gray', add_colorbar=False)
-    ax.set_aspect('equal')
+    A.plot.imshow(cmap="gray", add_colorbar=False)
+    ax.set_aspect("equal")
     ax.autoscale(tight=True)
-
-

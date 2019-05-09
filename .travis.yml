@@ -1,10 +1,9 @@
 language: python
 python:
-  - "3.6"
-# command to install dependencies, requirements.txt should NOT include numpy
+  - "3.7" # command to install dependencies, requirements.txt should NOT include numpy
 install:
-  #- python setup.py install
-  - pip install -r requirements.txt
+  - python setup.py install
+  #- pip install -r requirements.txt
   - pip install -r tests/test_requirements.txt
 # command to run tests
 script:
