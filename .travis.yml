@@ -3,6 +3,7 @@ python:
   - "3.6" # command to install dependencies, requirements.txt should NOT include numpy
 before_install:
   - sudo apt-get install -y ca-certificates
+  - export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 addons:
   apt:
     update: true
