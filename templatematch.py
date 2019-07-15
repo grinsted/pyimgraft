@@ -32,9 +32,13 @@ class MatchResult:
             )
             / resolution
         )
+#        ix = np.logical_or(
+#            strain > maxstrain, self.snr < minsnr
+#        )  # skip nans to avoid warnings        
         ix = np.logical_or(
-            strain > maxstrain, self.snr < minsnr
-        )  # skip nans to avoid warnings
+            np.greater(strain, maxstrain, where=~np.isnan(strain)),
+            np.less(self.snr, minsnr, where=~np.isnan(strain))
+        )  
         self.du[ix] = np.nan
         self.dv[ix] = np.nan
 
