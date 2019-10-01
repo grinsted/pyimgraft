@@ -1,5 +1,7 @@
 import numpy as np
-import scipy.ndimage
+#import scipy.ndimage
+from scipy import signal
+
 from scipy.signal import medfilt2d
 from scipy.interpolate import interp1d
 import pyfftw
@@ -205,7 +207,8 @@ def templatematch(
         pv[ii] = Acenter[1]
         initdu = Bcenter[0] - Acenter[0]  # actual offset
         initdv = Bcenter[1] - Acenter[1]
-
+        if np.isnan(p[0]+p[1]):
+            continue
         try:
             Brows = (Bcenter[1] + (-SearchHeight / 2, SearchHeight / 2)).astype(
                 "int"
@@ -263,10 +266,11 @@ def templatematch(
     return MatchResult(pu, pv, du, dv, peakCorr, meanAbsCorr, method="OC")
 
 
+
 def forient(img):
-    f = np.array([[1, 0, 0], [0, 0, 0], [0, 0, -1]])
-    r = scipy.ndimage.convolve(img, f, mode="nearest").astype(np.complex64)
-    r = r + complex(0, 1) * scipy.ndimage.convolve(img, np.rot90(f), mode="nearest")
+    f = np.array([[1.0, 0.0, 0.0+1.0j], [0.0, 0.0, 0.0], [0.0-1.0j, 0.0, -1.0]])
+    r =  signal.convolve2d(img,f, mode='same')
+
     m = np.abs(r)
     m[m == 0] = 1
     r = np.divide(r, m)
@@ -278,6 +282,7 @@ if __name__ == "__main__":
     # test code
     from geoimread import geoimread
     import matplotlib.pyplot as plt  # noqa
+
 
     # Read the data
     fA = "https://storage.googleapis.com/gcp-public-data-landsat/LC08/01/023/001/LC08_L1TP_023001_20150708_20170407_01_T1/LC08_L1TP_023001_20150708_20170407_01_T1_B8.TIF"
@@ -292,6 +297,11 @@ if __name__ == "__main__":
 
     import time
     from templatematch import templatematch  # noqa
+
+#    time1 = time.time()
+#    Q=forient(A)
+#    time2 = time.time()
+#    print('orienttime',time2-time1)
 
     time1 = time.time()
     r = templatematch(A, B, TemplateWidth=128, SearchWidth=128 + 64)
