@@ -268,9 +268,8 @@ def templatematch(
 
 
 def forient(img):
-    f = np.array([[1.0, 0.0, 0.0+1.0j], [0.0, 0.0, 0.0], [0.0-1.0j, 0.0, -1.0]])
+    f = np.array([[1.0, 0.0, 0.0+1.0j], [0.0, 0.0, 0.0], [0.0-1.0j, 0.0, -1.0]], np.complex64)
     r =  signal.convolve2d(img,f, mode='same')
-
     m = np.abs(r)
     m[m == 0] = 1
     r = np.divide(r, m)
@@ -298,10 +297,6 @@ if __name__ == "__main__":
     import time
     from templatematch import templatematch  # noqa
 
-#    time1 = time.time()
-#    Q=forient(A)
-#    time2 = time.time()
-#    print('orienttime',time2-time1)
 
     time1 = time.time()
     r = templatematch(A, B, TemplateWidth=128, SearchWidth=128 + 64)
