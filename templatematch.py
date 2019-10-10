@@ -77,10 +77,10 @@ def get_corners(pu):
     # calculate the corner points
     # return scipy.signal.convolve2d(pu_extend, np.ones((2, 2)/4), mode='valid')  # TODO: remove dependency
     return (
-        pu_extend[0:-2, 0:-2]
-        + pu_extend[0:-2, 1:-1]
-        + pu_extend[1:-1, 0:-2]
-        + pu_extend[1:-1, 1:-1]
+        pu_extend[0:-1, 0:-1]
+        + pu_extend[0:-1, 1:]
+        + pu_extend[1:, 0:-1]
+        + pu_extend[1:, 1:]
     ) / 4.0
 
 
@@ -273,8 +273,33 @@ def forient(img):
     m = np.abs(r)
     m[m == 0] = 1
     r = np.divide(r, m)
-
     return r
+
+
+def perftest(A,B,Twidths = np.arange(190,210), Addwidths = np.arange(25,38),N=100):
+    pu = np.linspace(300+A.shape[1],A.shape[1]-300,N)
+    pv = np.linspace(300+A.shape[0],A.shape[0]-300,N)
+    (Twidths,Addwidths)=np.meshgrid(Twidths,Addwidths)
+    Ctime = np.full(Twidths.shape, np.nan)       
+    A=forient(A)
+    B=forient(B)
+    for ii, Twidth in np.ndenumerate(Twidths):
+        Addwidth = Addwidths[ii]
+        time1 = time.time()
+        r = templatematch(A, B, pu=pu, pv=pv, TemplateWidth=Twidth, SearchWidth=Twidth + Addwidth)
+        time2 = time.time()
+        Ctime[ii] = time2-time1
+        print(Ctime[ii])
+        
+    plt.pcolor(Twidths,Addwidths,np.log(Ctime))
+    plt.xlabel('Templatewidth')
+    plt.colorbar()
+    return (Twidths,Addwidths,Ctime)
+        
+    
+    
+    
+
 
 
 if __name__ == "__main__":
@@ -288,18 +313,18 @@ if __name__ == "__main__":
     fB = "https://storage.googleapis.com/gcp-public-data-landsat/LC08/01/023/001/LC08_L1TP_023001_20160710_20170323_01_T1/LC08_L1TP_023001_20160710_20170323_01_T1_B8.TIF"
 
     A = geoimread(
-        fA, roi_x=[-30.19], roi_y=[81.245], roi_crs={"init": "EPSG:4326"}, buffer=20000
+        fA, roi_x=[-30.19], roi_y=[81.245], roi_crs={"init": "EPSG:4326"}, buffer=10000
     )
     B = geoimread(
-        fB, roi_x=[-30.19], roi_y=[81.245], roi_crs={"init": "EPSG:4326"}, buffer=20000
+        fB, roi_x=[-30.19], roi_y=[81.245], roi_crs={"init": "EPSG:4326"}, buffer=10000
     )
 
     import time
-    from templatematch import templatematch  # noqa
+#    from templatematch import templatematch  # noqa
 
 
     time1 = time.time()
-    r = templatematch(A, B, TemplateWidth=128, SearchWidth=128 + 64)
+    r = templatematch(A, B, TemplateWidth=128, SearchWidth=128 + 62)
     time2 = time.time()
     ##
 
@@ -313,7 +338,7 @@ if __name__ == "__main__":
     r.clean()
     r.plot(x=A.x, y=A.y)
 
-    print((time2 - time1) * 1000.0)
+    print('Time',(time2 - time1) * 1000.0)
     # plt.hist(r.du.ravel())
 
     print(np.nanmean(r.du.ravel()))
