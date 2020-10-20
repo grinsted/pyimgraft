@@ -40,7 +40,8 @@ class MatchResult:
         ix = np.logical_or(
             np.greater(strain, maxstrain, where=~np.isnan(strain)),
             np.less(self.snr, minsnr, where=~np.isnan(strain))
-        )  
+        ) 
+        ix = np.logical_or(ix, np.isnan(strain))
         self.du[ix] = np.nan
         self.dv[ix] = np.nan
 
